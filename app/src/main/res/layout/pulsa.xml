@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    tools:context="konita.rc.com.rc.activity.Pulsa">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Nomor Tujuan :" />
+
+        <EditText
+            android:id="@+id/editNomrHP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:inputType="phone"
+            android:background="@android:drawable/editbox_background_normal"
+            android:hint="Masukkan nomor tujuan Anda" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Provider / Operator :" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imgOperator"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_axis"/>
+            <TextView
+                android:id="@+id/teksOperator"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Masukkan nomor terlebih dulu"
+                android:textColor="#333333"
+                android:textSize="17dp"
+                android:textAlignment="center"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Nominal :" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="2dp"
+            android:background="@android:drawable/editbox_background_normal">
+            <Spinner
+                android:id="@+id/spinNomPulsa"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:entries="@array/nominal" />
+        </LinearLayout>
+        <EditText
+            android:id="@+id/editPin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:inputType="phone"
+            android:background="@android:drawable/editbox_background_normal"
+            android:hint="Masukkan PIN Anda" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBatal"
+            android:background="@drawable/btn_batal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:text="batal"
+            android:textColor="@color/colorPrimary" />
+
+        <Button
+            android:id="@+id/btnBeli"
+            android:background="@drawable/btn_beli"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:text="beli"
+            android:textColor="@color/colorWhite"/>
+    </LinearLayout>
+
+</RelativeLayout>

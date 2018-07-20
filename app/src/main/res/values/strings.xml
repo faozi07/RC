@@ -1,0 +1,73 @@
+<resources>
+    <string name="app_name">Rofi Cell</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main">MenuUtama2</string>
+    <string name="title_activity_menu_utama">Rofi Cell</string>
+    <string name="rofi_cell">Rofi Cell</string>
+    <string name="jakarta_timur">Jakarta Timur</string>
+    <string-array name="operator">
+        <item>-- PILIH OPERATOR --</item>
+        <item>TELKOMSEL</item>
+        <item>INDOSAT</item>
+        <item>AXIS</item>
+        <item>XL</item>
+        <item>TRI</item>
+    </string-array>
+    <string-array name="pln">
+        <item>-- PILIH JENIS LAYANAN --</item>
+        <item>BULANAN</item>
+        <item>TOKEN</item>
+    </string-array>
+    <string-array name="opTelkomsel">
+        <item>Rp. 5.000,-</item>
+        <item>Rp. 10.000,-</item>
+        <item>Rp. 20.000,-</item>
+        <item>Rp. 50.000,-</item>
+        <item>Rp. 100.000,-</item>
+    </string-array>
+    <string-array name="opIndosat">
+        <item>Rp. 5.000,-</item>
+        <item>Rp. 10.000,-</item>
+        <item>Rp. 25.000,-</item>
+        <item>Rp. 50.000,-</item>
+        <item>Rp. 100.000,-</item>
+    </string-array>
+    <string-array name="opAxis">
+        <item>Rp. 5.000,-</item>
+        <item>Rp. 10.000,-</item>
+        <item>Rp. 25.000,-</item>
+        <item>Rp. 50.000,-</item>
+        <item>Rp. 100.000,-</item>
+    </string-array>
+    <string-array name="opXL">
+        <item>Rp. 5.000,-</item>
+        <item>Rp. 10.000,-</item>
+        <item>Rp. 25.000,-</item>
+        <item>Rp. 50.000,-</item>
+        <item>Rp. 100.000,-</item>
+    </string-array>
+    <string-array name="opTri">
+        <item>Rp. 1.000,-</item>
+        <item>Rp. 3.000,-</item>
+        <item>Rp. 5.000,-</item>
+        <item>Rp. 10.000,-</item>
+        <item>Rp. 20.000,-</item>
+        <item>Rp. 50.000,-</item>
+        <item>Rp. 100.000,-</item>
+    </string-array>
+    <string-array name="nomTokenPln">
+        <item>-- Pilih Nominal --</item>
+        <item>Rp. 20.000,-</item>
+        <item>Rp. 50.000,-</item>
+        <item>Rp. 100.000,-</item>
+        <item>Rp. 200.000,-</item>
+        <item>Rp. 500.000,-</item>
+    </string-array>
+    <string-array name="nominal">
+        <item>-- PILIH NOMINAL --</item>
+    </string-array>
+</resources>

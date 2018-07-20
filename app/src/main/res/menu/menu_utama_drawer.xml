@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_beranda"
+            android:icon="@drawable/ic_home"
+            android:title="Beranda" />
+        <item
+            android:id="@+id/nav_pulsa"
+            android:icon="@drawable/ic_smartphone"
+            android:title="Pembelian Pulsa" />
+        <item
+            android:id="@+id/nav_pln"
+            android:icon="@drawable/ic_flash"
+            android:title="Pembayaran PLN" />
+        <item
+            android:id="@+id/nav_riwayat"
+            android:icon="@drawable/ic_history"
+            android:title="Riwayat" />
+        <item
+            android:id="@+id/nav_ttg_kami"
+            android:icon="@drawable/ic_info"
+            android:title="Tentang Kami" />
+        <item
+            android:id="@+id/nav_keluar"
+            android:icon="@drawable/ic_logout"
+            android:title="Keluar" />
+    </group>
+</menu>
