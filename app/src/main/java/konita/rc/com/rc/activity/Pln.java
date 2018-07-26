@@ -19,14 +19,22 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 import konita.rc.com.rc.R;
+import konita.rc.com.rc.database.PulsaDB;
 
 public class Pln extends AppCompatActivity {
 
     Spinner spinNominal;
     EditText editIdPelanggan;
     Button btnCancel, btnBayar;
-    boolean isBulanan = false;
+    public static boolean isBerhasil = false, isFromMenu = false;
+    public static String nominal = "", noIdPelanggan = "";
+    PulsaDB pulsaDB;
+    String namaHariIni = "";
+    int tgl, bulan, tahun;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,23 +44,18 @@ public class Pln extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        pulsaDB = new PulsaDB(Pln.this);
         spinNominal = (Spinner) findViewById(R.id.spinNominal);
         editIdPelanggan = (EditText) findViewById(R.id.editIdPelanggan);
+        btnBayar = (Button) findViewById(R.id.btnBeli);
+        btnCancel = (Button) findViewById(R.id.btnBatal);
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isBulanan) {
-                    if (isCompleteBulanan()) {
-                        permissionSms();
-                    } else {
-                        Toast.makeText(Pln.this, "Inputan tidak boleh kosong", Toast.LENGTH_LONG).show();
-                    }
+                if (isCompleteBulanan()) {
+                    permissionSms();
                 } else {
-//                    if (isCompleteTagihan()) {
-//                        permissionSms();
-//                    } else {
-//                        Toast.makeText(Pln.this, "Inputan tidak boleh kosong", Toast.LENGTH_LONG).show();
-//                    }
+                    Toast.makeText(Pln.this, "Inputan tidak boleh kosong", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -62,6 +65,28 @@ public class Pln extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        Calendar calendar = Calendar.getInstance();
+        tgl = calendar.get(Calendar.DAY_OF_MONTH);
+        int tglHari = calendar.get(Calendar.DAY_OF_WEEK);
+        bulan = calendar.get(Calendar.MONTH) + 1;
+        tahun = calendar.get(Calendar.YEAR);
+
+        if (tglHari == Calendar.MONDAY) {
+            namaHariIni = "Senin";
+        } else if (tglHari == Calendar.TUESDAY) {
+            namaHariIni = "Selasa";
+        } else if (tglHari == Calendar.WEDNESDAY) {
+            namaHariIni = "Rabu";
+        } else if (tglHari == Calendar.THURSDAY) {
+            namaHariIni = "Kamis";
+        } else if (tglHari == Calendar.FRIDAY) {
+            namaHariIni = "Jum'at";
+        } else if (tglHari == Calendar.SATURDAY) {
+            namaHariIni = "Sabtu";
+        } else if (tglHari == Calendar.SUNDAY) {
+            namaHariIni = "Minggu";
+        }
     }
 
     @Override
@@ -75,6 +100,24 @@ public class Pln extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isFromMenu) {
+            isiUlang();
+        }
+    }
+
+    private void isiUlang() {
+        editIdPelanggan.setText(noIdPelanggan);
+        String[] arrayNominal = getResources().getStringArray(R.array.nomTokenPln);
+        for (int i=0;i<arrayNominal.length;i++) {
+            if (nominal.equals(arrayNominal[i])) {
+                spinNominal.setSelection(i);
+            }
+        }
+    }
+
     private void permissionSms() {
         if (Build.VERSION.SDK_INT > 22) {
             String permission = Manifest.permission.SEND_SMS;
@@ -82,7 +125,7 @@ public class Pln extends AppCompatActivity {
             if (grant != PackageManager.PERMISSION_GRANTED) {
                 String[] permissionList = new String[1];
                 permissionList[0] = permission;
-                ActivityCompat.requestPermissions(this, permissionList,1);
+                ActivityCompat.requestPermissions(this, permissionList, 1);
             } else {
                 sendSmsByManager();
             }
@@ -96,11 +139,11 @@ public class Pln extends AppCompatActivity {
     }
 
     public String filterDigit(String message) {
-        int len=0, i=0;
+        int len = 0, i = 0;
         boolean isDigit;
 
         char[] data = message.toCharArray();
-        while (i<data.length) {
+        while (i < data.length) {
             isDigit = Character.isDigit(data[i]);
             if (isDigit) {
                 data[len] = data[i];
@@ -116,30 +159,31 @@ public class Pln extends AppCompatActivity {
 
     public void sendSmsByManager() {
         int nominals = Integer.parseInt(filterDigit(spinNominal.getSelectedItem().toString()));
-//        try {
-//            // Mengambil default instance dari SmsManager
-//            SmsManager smsManager = SmsManager.getDefault();
-//            smsManager.sendTextMessage("085797511021",
-//                    null,
-//                    operator+"#"+nominals+"#"+editNoHp.getText().toString()+"#"+editPin.getText().toString(),
-//                    null,
-//                    null);
-//            Toast.makeText(Pln.this, "SMS Berhasil Dikirim!",
-//                    Toast.LENGTH_LONG).show();
-//            String nomor = editNoHp.getText().toString();
-//            String nominal = spinNominal.getSelectedItem().toString();
-//            String tanggal = namaHariIni+", "+tgl+"/"+bulan+"/"+tahun;
-////            pulsaDB.insertTransaksi(nomor,operator,nominal,tanggal);
-//            if (isBerhasil) {
-//                showDialog("Transaksi Berhasil", "Silahkan lihat laporan di riwayat transaksi");
-//            } else {
-//                showDialog("Transaksi Gagal", "Silahkan coba kembali");
-//            }
-//        } catch (Exception ex) {
-//            Toast.makeText(Pln.this,"Pengiriman SMS Gagal...",
-//                    Toast.LENGTH_LONG).show();
-//            ex.printStackTrace();
-//        }
+        String nom = String.valueOf(nominals).substring(0,String.valueOf(nominals).length()-3);
+        try {
+            String nomor = editIdPelanggan.getText().toString();
+            String nominal = spinNominal.getSelectedItem().toString();
+            String tanggal = namaHariIni + ", " + tgl + "/" + bulan + "/" + tahun;
+            // Mengambil default instance dari SmsManager
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage("085797511021", //085814198868
+                    null,
+                    nom + "." + editIdPelanggan.getText().toString() + ".1234",
+                    null,
+                    null);
+            Toast.makeText(Pln.this, "SMS Berhasil Dikirim!",
+                    Toast.LENGTH_LONG).show();
+            pulsaDB.insertTransaksi(nomor, "PLN PRABAYAR", nominal, tanggal, false);
+            if (isBerhasil) {
+                showDialog("Transaksi Berhasil", "Silahkan lihat laporan di riwayat transaksi");
+            } else {
+                showDialog("Transaksi Gagal", "Silahkan coba kembali");
+            }
+        } catch (Exception ex) {
+            Toast.makeText(Pln.this, "Pengiriman SMS Gagal...",
+                    Toast.LENGTH_LONG).show();
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -147,9 +191,9 @@ public class Pln extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                sendSmsByManager();
+                sendSmsByManager();
             } else {
-                Toast.makeText(Pln.this,"Aplikasi ini tidak diizinkan mengirim SMS", Toast.LENGTH_LONG).show();
+                Toast.makeText(Pln.this, "Aplikasi ini tidak diizinkan mengirim SMS", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -165,10 +209,10 @@ public class Pln extends AppCompatActivity {
                 .setMessage(message)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-//                        if (isBerhasil) {
-//                            isBerhasil = false;
-//                            finish();
-//                        }
+                        if (isBerhasil) {
+                            isBerhasil = false;
+                            finish();
+                        }
                     }
                 })
                 .show();

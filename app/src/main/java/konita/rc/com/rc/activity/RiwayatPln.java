@@ -1,7 +1,9 @@
 package konita.rc.com.rc.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,13 +17,13 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import konita.rc.com.rc.R;
-import konita.rc.com.rc.adapter.PulsaAdapter;
+import konita.rc.com.rc.adapter.TransaksiAdapter;
 import konita.rc.com.rc.database.PulsaDB;
 import konita.rc.com.rc.model.modTransaksi;
 
 public class RiwayatPln extends Fragment {
 
-    PulsaAdapter pulsaAdapter;
+    TransaksiAdapter plnAdapter;
     RecyclerView rvRiwayat;
     public static ArrayList<modTransaksi> arrayRiwayat = new ArrayList<>();
     PulsaDB pulsaDB;
@@ -41,13 +43,22 @@ public class RiwayatPln extends Fragment {
     private void deklarasi(View view) {
         arrayRiwayat.clear();
         pulsaDB = new PulsaDB(getActivity());
-        pulsaDB.showTransaksiPulsa();
+        pulsaDB.showTransaksiPln();
         rvRiwayat = view.findViewById(R.id.rcRiwayat);
 
         llm = new LinearLayoutManager(getActivity());
         rvRiwayat.setLayoutManager(llm);
         rvRiwayat.setHasFixedSize(true);
-        pulsaAdapter = new PulsaAdapter(getActivity(), arrayRiwayat);
-        rvRiwayat.setAdapter(pulsaAdapter);
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Memuat data");
+        progressDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                plnAdapter = new TransaksiAdapter(getActivity(), arrayRiwayat);
+                rvRiwayat.setAdapter(plnAdapter);
+                progressDialog.dismiss();
+            }
+        },2000);
     }
 }

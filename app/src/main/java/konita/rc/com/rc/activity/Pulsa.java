@@ -31,7 +31,7 @@ import konita.rc.com.rc.database.PulsaDB;
 public class Pulsa extends AppCompatActivity {
 
     Spinner spinNominal;
-    EditText editNoHp, editPin;
+    EditText editNoHp;
     Button btnBatal,btnBeli;
     TextView teksOperator;
     ImageView imgOperator;
@@ -39,7 +39,9 @@ public class Pulsa extends AppCompatActivity {
     PulsaDB pulsaDB;
     String namaHariIni = "", operator = "";
     int tgl,bulan,tahun;
-    public static boolean isBerhasil = false;
+    public static boolean isBerhasil = false, isFromMenu = false;
+    public static String nominal = "", noHp = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,14 @@ public class Pulsa extends AppCompatActivity {
         }
         deklarasi();
         action();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isFromMenu) {
+            isiUlang();
+        }
     }
 
     @Override
@@ -68,7 +78,6 @@ public class Pulsa extends AppCompatActivity {
         spinNominal = (Spinner) findViewById(R.id.spinNomPulsa);
         teksOperator = (TextView) findViewById(R.id.teksOperator);
         editNoHp = (EditText) findViewById(R.id.editNomrHP);
-        editPin = (EditText) findViewById(R.id.editPin);
         imgOperator = (ImageView) findViewById(R.id.imgOperator);
         btnBatal = (Button) findViewById(R.id.btnBatal);
         btnBeli = (Button) findViewById(R.id.btnBeli);
@@ -95,6 +104,30 @@ public class Pulsa extends AppCompatActivity {
             namaHariIni = "Sabtu";
         } else if (tglHari == Calendar.SUNDAY) {
             namaHariIni = "Minggu";
+        }
+    }
+
+    private void isiUlang() {
+        editNoHp.setText(noHp);
+        listProvider();
+        String[] arrayNominal = {};
+        if (operator.equals("TELKOMSEL")) {
+            arrayNominal = getResources().getStringArray(R.array.opTelkomsel);
+        } else if (operator.equals("INDOSAT")) {
+            arrayNominal = getResources().getStringArray(R.array.opIndosat);
+        } else if (operator.equals("AXIS")) {
+            arrayNominal = getResources().getStringArray(R.array.opAxis);
+        } else if (operator.equals("XL")) {
+            arrayNominal = getResources().getStringArray(R.array.opXL);
+        } else if (operator.equals("TRI")) {
+            arrayNominal = getResources().getStringArray(R.array.opTri);
+        } else {
+            arrayNominal = getResources().getStringArray(R.array.nominal);
+        }
+        for (int i=0;i<arrayNominal.length;i++) {
+            if (nominal.equals(arrayNominal[i])) {
+                spinNominal.setSelection(i);
+            }
         }
     }
 
@@ -174,7 +207,7 @@ public class Pulsa extends AppCompatActivity {
 
     private boolean isComplete() {
         return !editNoHp.getText().toString().equals("") || !operator.equals("") ||
-                !spinNominal.getSelectedItem().toString().equals("-- PILIH NOMINAL --") || !editPin.getText().toString().equals("");
+                !spinNominal.getSelectedItem().toString().equals("-- PILIH NOMINAL --");
     }
 
     public String filterDigit(String message) {
@@ -198,20 +231,21 @@ public class Pulsa extends AppCompatActivity {
 
     public void sendSmsByManager() {
         int nominals = Integer.parseInt(filterDigit(spinNominal.getSelectedItem().toString()));
+        String nom = String.valueOf(nominals).substring(0,String.valueOf(nominals).length()-3);
         try {
+            String nomor = editNoHp.getText().toString();
+            String nominal = spinNominal.getSelectedItem().toString();
+            String tanggal = namaHariIni+", "+tgl+"/"+bulan+"/"+tahun;
             // Mengambil default instance dari SmsManager
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage("081311590124",
+            smsManager.sendTextMessage("085797511021", //085814198868
                     null,
-                    operator+"*"+nominals+"*"+editNoHp.getText().toString()+"*"+editPin.getText().toString(),
+                    nom+"."+nomor+".1234",
                     null,
                     null);
             Toast.makeText(Pulsa.this, "SMS Berhasil Dikirim!",
                     Toast.LENGTH_LONG).show();
-            String nomor = editNoHp.getText().toString();
-            String nominal = spinNominal.getSelectedItem().toString();
-            String tanggal = namaHariIni+", "+tgl+"/"+bulan+"/"+tahun;
-            pulsaDB.insertTransaksi(nomor,operator,nominal,tanggal);
+            pulsaDB.insertTransaksi(nomor,operator,nominal,tanggal, true);
             if (isBerhasil) {
                 showDialog("Transaksi Berhasil", "Silahkan lihat laporan di riwayat transaksi");
             } else {

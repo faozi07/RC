@@ -1,7 +1,10 @@
 package konita.rc.com.rc.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -47,10 +50,6 @@ public class MenuUtama extends AppCompatActivity
         pulsaDB = new PulsaDB(MenuUtama.this);
         SQLiteDatabase sqLiteDatabase = pulsaDB.getWritableDatabase();
         pulsaDB.onCreate(sqLiteDatabase);
-
-        plnDB = new PlnDB(MenuUtama.this);
-        SQLiteDatabase sqLiteDatabase2 = plnDB.getWritableDatabase();
-        plnDB.onCreate(sqLiteDatabase2);
     }
 
     @Override
@@ -80,7 +79,7 @@ public class MenuUtama extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
             finish();
-            Toast.makeText(MenuUtama.this,"Berhasil Logout",Toast.LENGTH_LONG).show();
+            Toast.makeText(MenuUtama.this, "Berhasil Logout", Toast.LENGTH_LONG).show();
             startActivity(new Intent(MenuUtama.this, Login.class));
             return true;
         }
@@ -97,19 +96,44 @@ public class MenuUtama extends AppCompatActivity
         if (id == R.id.nav_beranda) {
             // Handle the camera action
         } else if (id == R.id.nav_pulsa) {
-            startActivity(new Intent(this,Pulsa.class));
+            Pulsa.isFromMenu = true;
+            startActivity(new Intent(this, Pulsa.class));
         } else if (id == R.id.nav_pln) {
-            startActivity(new Intent(this,Pln.class));
+            Pln.isFromMenu = true;
+            startActivity(new Intent(this, Pln.class));
         } else if (id == R.id.nav_riwayat) {
-            startActivity(new Intent(this,Riwayat.class));
+            startActivity(new Intent(this, Riwayat.class));
         } else if (id == R.id.nav_ttg_kami) {
-            startActivity(new Intent(this,TentangKami.class));
+            startActivity(new Intent(this, TentangKami.class));
         } else if (id == R.id.nav_keluar) {
-
+            showDialogKeluar();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void showDialogKeluar() {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(MenuUtama.this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(MenuUtama.this);
+        }
+        builder.setTitle("Keluar")
+                .setMessage("Anda yakin akan keluar dari aplikasi ini?")
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                })
+                .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 }

@@ -7,15 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
-import java.util.ArrayList;
 
 import konita.rc.com.rc.R;
-import konita.rc.com.rc.adapter.PulsaAdapter;
-import konita.rc.com.rc.database.PulsaDB;
-import konita.rc.com.rc.model.modTransaksi;
+import konita.rc.com.rc.adapter.TransaksiAdapter;
 
 public class Riwayat extends AppCompatActivity {
 
@@ -52,6 +46,11 @@ public class Riwayat extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                if (tab.getPosition() == 0) {
+                    TransaksiAdapter.isPulsa = true;
+                } else {
+                    TransaksiAdapter.isPulsa = false;
+                }
             }
 
             @Override
@@ -80,7 +79,7 @@ public class Riwayat extends AppCompatActivity {
                 case 0:
                     return new RiwayatPulsa();
                 case 1:
-                    return new RiwayatPulsa();
+                    return new RiwayatPln();
                 default:
                     return null;
             }

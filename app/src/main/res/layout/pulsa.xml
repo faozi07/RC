@@ -79,15 +79,6 @@
                 android:layout_height="match_parent"
                 android:entries="@array/nominal" />
         </LinearLayout>
-        <EditText
-            android:id="@+id/editPin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:inputType="phone"
-            android:background="@android:drawable/editbox_background_normal"
-            android:hint="Masukkan PIN Anda" />
     </LinearLayout>
 
     <LinearLayout

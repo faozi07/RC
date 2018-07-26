@@ -6,6 +6,7 @@ package konita.rc.com.rc.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -18,23 +19,23 @@ import android.widget.TextView;
 import java.util.List;
 
 import konita.rc.com.rc.R;
+import konita.rc.com.rc.activity.Pln;
+import konita.rc.com.rc.activity.Pulsa;
 import konita.rc.com.rc.database.PulsaDB;
 import konita.rc.com.rc.model.modTransaksi;
 
-public class PulsaAdapter extends RecyclerView.Adapter {
+public class TransaksiAdapter extends RecyclerView.Adapter {
 
     @SuppressLint("StaticFieldLeak")
     public static Activity activity;
     public static List<modTransaksi> items;
+    public static boolean isPulsa = false;
 
     private final int VIEW_ITEM = 1;
-    private int lastPosition = -1;
-    private PulsaDB pulsaDB;
 
-    public PulsaAdapter(Activity act, List<modTransaksi> data) {
+    public TransaksiAdapter(Activity act, List<modTransaksi> data) {
         activity = act;
         items = data;
-        pulsaDB = new PulsaDB(act);
     }
 
     @Override
@@ -70,7 +71,7 @@ public class PulsaAdapter extends RecyclerView.Adapter {
             View v = LayoutInflater.from(parent.getContext()).inflate(
                     R.layout.item_riwayat, parent, false);
 
-            vh = new PulsaAdapter.BrandViewHolder(v);
+            vh = new TransaksiAdapter.BrandViewHolder(v);
         }
 
         return vh;
@@ -79,13 +80,13 @@ public class PulsaAdapter extends RecyclerView.Adapter {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        if (holder instanceof PulsaAdapter.BrandViewHolder) {
+        if (holder instanceof TransaksiAdapter.BrandViewHolder) {
             try {
-                modTransaksi mrt = items.get(position);
-                ((PulsaAdapter.BrandViewHolder) holder).tNominal.setText(mrt.getNominal());
-                ((PulsaAdapter.BrandViewHolder) holder).tTglTrx.setText(mrt.getTglTrx());
-                ((PulsaAdapter.BrandViewHolder) holder).tNoHp.setText(mrt.getNoHp());
-                ((PulsaAdapter.BrandViewHolder) holder).tProvider.setText(mrt.getProvider());
+                final modTransaksi mrt = items.get(position);
+                ((TransaksiAdapter.BrandViewHolder) holder).tNominal.setText(mrt.getNominal());
+                ((TransaksiAdapter.BrandViewHolder) holder).tTglTrx.setText(mrt.getTglTrx());
+                ((TransaksiAdapter.BrandViewHolder) holder).tNoHp.setText(mrt.getNoHp());
+                ((TransaksiAdapter.BrandViewHolder) holder).tProvider.setText(mrt.getProvider());
                 if (mrt.getProvider().equals("TELKOMSEL")) {
                     ((BrandViewHolder) holder).imgLogo.setImageResource(R.drawable.ic_telkomsel);
                 } else if (mrt.getProvider().equals("INDOSAT")) {
@@ -97,10 +98,20 @@ public class PulsaAdapter extends RecyclerView.Adapter {
                 } else if (mrt.getProvider().equals("TRI")) {
                     ((BrandViewHolder) holder).imgLogo.setImageResource(R.drawable.ic_tri);
                 }
-                ((PulsaAdapter.BrandViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
+                ((TransaksiAdapter.BrandViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        if (isPulsa) {
+                            Pulsa.isFromMenu = false;
+                            Pulsa.nominal = mrt.getNominal();
+                            Pulsa.noHp = mrt.getNoHp();
+                            activity.startActivity(new Intent(activity, Pulsa.class));
+                        } else {
+                            Pln.isFromMenu = false;
+                            Pln.nominal = mrt.getNominal();
+                            Pln.noIdPelanggan = mrt.getNoHp();
+                            activity.startActivity(new Intent(activity, Pln.class));
+                        }
                     }
                 });
             } catch (ArrayIndexOutOfBoundsException exp) {
