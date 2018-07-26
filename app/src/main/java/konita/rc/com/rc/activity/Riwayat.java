@@ -38,6 +38,7 @@ public class Riwayat extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+        TransaksiAdapter.isPulsa = true;
     }
 
     private void action() {

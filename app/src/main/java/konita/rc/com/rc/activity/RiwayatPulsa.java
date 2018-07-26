@@ -40,6 +40,22 @@ public class RiwayatPulsa extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Memuat data");
+        progressDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                transaksiAdapter = new TransaksiAdapter(getActivity(), arrayRiwayat);
+                rvRiwayat.setAdapter(transaksiAdapter);
+                progressDialog.dismiss();
+            }
+        },2000);
+    }
+
     private void deklarasi(View view) {
         arrayRiwayat.clear();
         pulsaDB = new PulsaDB(getActivity());

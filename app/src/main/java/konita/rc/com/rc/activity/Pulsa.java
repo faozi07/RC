@@ -238,7 +238,7 @@ public class Pulsa extends AppCompatActivity {
             String tanggal = namaHariIni+", "+tgl+"/"+bulan+"/"+tahun;
             // Mengambil default instance dari SmsManager
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage("085797511021", //085814198868
+            smsManager.sendTextMessage("085814198868", //085814198868
                     null,
                     nom+"."+nomor+".1234",
                     null,
