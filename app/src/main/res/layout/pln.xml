@@ -49,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
+            android:inputType="number"
             android:background="@android:drawable/editbox_background_normal"
             android:hint="Masukkan ID Pelanggan Anda"
             android:padding="10dp" />

@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:padding="10dp"
-            android:inputType="phone"
+            android:inputType="number"
             android:background="@android:drawable/editbox_background_normal"
             android:hint="Masukkan nomor tujuan Anda" />
 
@@ -44,8 +44,8 @@
 
             <ImageView
                 android:id="@+id/imgOperator"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="100dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_axis"/>
             <TextView

@@ -174,6 +174,10 @@ public class Pulsa extends AppCompatActivity {
                         teksOperator.setVisibility(View.GONE);
                         imgOperator.setVisibility(View.VISIBLE);
                         imgOperator.setImageDrawable(getResources().getDrawable(R.drawable.ic_axis));
+                    } else {
+                        teksOperator.setVisibility(View.VISIBLE);
+                        teksOperator.setText("Nomor Anda tidak valid");
+                        imgOperator.setVisibility(View.GONE);
                     }
                 } else {
                     operator = "";
@@ -238,7 +242,7 @@ public class Pulsa extends AppCompatActivity {
             String tanggal = namaHariIni+", "+tgl+"/"+bulan+"/"+tahun;
             // Mengambil default instance dari SmsManager
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage("085814198868", //085814198868
+            smsManager.sendTextMessage("085797511021", //085814198868
                     null,
                     nom+"."+nomor+".1234",
                     null,

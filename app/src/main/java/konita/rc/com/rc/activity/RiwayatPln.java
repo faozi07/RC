@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,7 @@ public class RiwayatPln extends Fragment {
     public static ArrayList<modTransaksi> arrayRiwayat = new ArrayList<>();
     PulsaDB pulsaDB;
     LinearLayoutManager llm;
+    TextView teksNoData;
 
     @Nullable
     @Override
@@ -49,32 +51,30 @@ public class RiwayatPln extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                plnAdapter = new TransaksiAdapter(getActivity(), arrayRiwayat);
-                rvRiwayat.setAdapter(plnAdapter);
+                if (arrayRiwayat != null && arrayRiwayat.size()>0) {
+                    plnAdapter = new TransaksiAdapter(getActivity(), arrayRiwayat);
+                    rvRiwayat.setAdapter(plnAdapter);
+                    teksNoData.setVisibility(View.GONE);
+                } else {
+                    teksNoData.setVisibility(View.VISIBLE);
+                }
                 progressDialog.dismiss();
             }
         },2000);
     }
 
+    @SuppressLint("SetTextI18n")
     private void deklarasi(View view) {
         arrayRiwayat.clear();
         pulsaDB = new PulsaDB(getActivity());
         pulsaDB.showTransaksiPln();
         rvRiwayat = view.findViewById(R.id.rcRiwayat);
+        teksNoData = view.findViewById(R.id.teksNoData);
 
+        teksNoData.setText("Belum ada riwayat pembelian Token PLN");
+        teksNoData.setVisibility(View.GONE);
         llm = new LinearLayoutManager(getActivity());
         rvRiwayat.setLayoutManager(llm);
         rvRiwayat.setHasFixedSize(true);
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Memuat data");
-        progressDialog.show();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                plnAdapter = new TransaksiAdapter(getActivity(), arrayRiwayat);
-                rvRiwayat.setAdapter(plnAdapter);
-                progressDialog.dismiss();
-            }
-        },2000);
     }
 }
